@@ -8,6 +8,9 @@ using UnityEngine;
 
 namespace CommonAPI
 {
+    /// <summary>
+    /// Provides methods to more easily load assets from the game's asset bundles.
+    /// </summary>
     public static class AssetAPI
     {
         private static Dictionary<ShaderNames, Shader> CachedShaders = new Dictionary<ShaderNames, Shader>();
@@ -18,10 +21,17 @@ namespace CommonAPI
             AmbientEnvironmentCutout,
             AmbientEnvironmentTransparent
         }
+
+        /// <summary>
+        /// Returns a shader from the game.
+        /// </summary>
         public static Shader GetShader(ShaderNames shaderName)
         {
             if (CachedShaders.TryGetValue(shaderName, out Shader result))
-                return result;
+            {
+                if (result != null)
+                    return result;
+            }
             var assets = Core.Instance.Assets;
             switch(shaderName)
             {
