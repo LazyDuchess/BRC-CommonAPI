@@ -13,7 +13,13 @@ namespace CommonAPI
     /// </summary>
     public static class SaveAPI
     {
-        public delegate void SaveGameDelegate(int saveSlot, string saveSlotFilename);
+        /// <summary>
+        /// Delegate for savegame events.
+        /// </summary>
+        /// <param name="saveSlot">Slot this savegame is in.</param>
+        /// <param name="saveSlotFilename">Filename for the savegame.</param>
+        /// <param name="fileId">The number in the filename. Might not be the same as the slot. Use this to name your own save files.</param>
+        public delegate void SaveGameDelegate(int saveSlot, string saveSlotFilename, int fileId);
         /// <summary>
         /// Called when a new slate gets created.
         /// </summary>
@@ -52,7 +58,7 @@ namespace CommonAPI
             var saveSlotFilename = Core.Instance.SaveManager.saveSlotHandler.GetSaveSlotFileName(slotId);
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Loading into save slot {slotId}, filename: {saveSlotFilename} (Initialized)");
-            OnLoadStageInitialized?.Invoke(slotId, saveSlotFilename);
+            OnLoadStageInitialized?.Invoke(slotId, saveSlotFilename, GetFilenameID(saveSlotFilename));
             AlreadyRanOnLoadStageInitialized = true;
         }
 
@@ -64,8 +70,21 @@ namespace CommonAPI
             var saveSlotFilename = Core.Instance.SaveManager.saveSlotHandler.GetSaveSlotFileName(slotId);
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Loading into save slot {slotId}, filename: {saveSlotFilename} (PostInitialiation)");
-            OnLoadStagePostInitialization?.Invoke(slotId, saveSlotFilename);
+            OnLoadStagePostInitialization?.Invoke(slotId, saveSlotFilename, GetFilenameID(saveSlotFilename));
             AlreadyRanOnLoadStagePostInitialization = true;
+        }
+        
+        internal static int GetFilenameID(string filename)
+        {
+            var num = "";
+            for(var i=0;i<filename.Length;i++)
+            {
+                if (char.IsDigit(filename[i]))
+                    num += filename[i];
+            }
+            if (int.TryParse(num, out int result))
+                return result;
+            return -1;
         }
     }
 }

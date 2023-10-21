@@ -22,7 +22,7 @@ namespace CommonAPI.Patches
                 return;
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Saving {saveSlotFilename} in slot {saveSlotId}");
-            SaveAPI.OnSaveGame?.Invoke(saveSlotId, saveSlotFilename);
+            SaveAPI.OnSaveGame?.Invoke(saveSlotId, saveSlotFilename, SaveAPI.GetFilenameID(saveSlotFilename));
         }
 
         [HarmonyPrefix]
@@ -36,7 +36,7 @@ namespace CommonAPI.Patches
                 return;
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Deleting save {saveSlotFilename} in slot {slotId}");
-            SaveAPI.OnDeleteGame?.Invoke(slotId, saveSlotFilename);
+            SaveAPI.OnDeleteGame?.Invoke(slotId, saveSlotFilename, SaveAPI.GetFilenameID(saveSlotFilename));
         }
 
         [HarmonyPrefix]
@@ -46,7 +46,7 @@ namespace CommonAPI.Patches
             var saveSlotFilename = __instance.GenerateNewSaveSlotFileName(saveSlotId);
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Creating save {saveSlotFilename} in slot {saveSlotId}");
-            SaveAPI.OnNewGame?.Invoke(saveSlotId, saveSlotFilename);
+            SaveAPI.OnNewGame?.Invoke(saveSlotId, saveSlotFilename, SaveAPI.GetFilenameID(saveSlotFilename));
         }
     }
 }
