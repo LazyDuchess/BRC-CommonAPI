@@ -18,7 +18,8 @@ namespace CommonAPI
         public string Filename;
 
         /// <summary>
-        /// Default constructor. Given a plugin's name and a filename with a "{0}" token to format, will save the data inside BepInEx/config/(PluginName)/saves/(Filename)
+        /// Default constructor. Given a plugin's name and a filename with a "{0}" token to format, will save the data inside BepInEx/config/(PluginName)/saves/(Filename).
+        /// This constructor will also register the savedata into the SaveAPI.
         /// </summary>
         public CustomSaveData(string pluginName, string filename)
         {

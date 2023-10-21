@@ -53,6 +53,7 @@ namespace CommonAPI
             {
                 throw new Exception("Can't register save data for " + customSaveData.GetType() +", Filename is missing a \"{0}\" token to differentiate save slots. Filename is: " + customSaveData.Filename);
             }
+            CommonAPIPlugin.Log.LogInfo($"Registering custom save data {customSaveData.GetType()}");
             _customSaveDatas.Add(customSaveData);
         }
 
