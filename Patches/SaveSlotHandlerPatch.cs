@@ -20,9 +20,11 @@ namespace CommonAPI.Patches
             var saveSlotFilename = __instance.GetSaveSlotFileName(saveSlotId);
             if (string.IsNullOrEmpty(saveSlotFilename))
                 return;
+            var fileID = SaveAPI.GetFilenameID(saveSlotFilename);
+            SaveAPI.SaveAllCustomData(fileID);
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Saving {saveSlotFilename} in slot {saveSlotId}");
-            SaveAPI.OnSaveGame?.Invoke(saveSlotId, saveSlotFilename, SaveAPI.GetFilenameID(saveSlotFilename));
+            SaveAPI.OnSaveGame?.Invoke(saveSlotId, saveSlotFilename, fileID);
         }
 
         [HarmonyPrefix]
@@ -34,9 +36,11 @@ namespace CommonAPI.Patches
             var saveSlotFilename = __instance.GetSaveSlotFileName(slotId);
             if (string.IsNullOrEmpty(saveSlotFilename))
                 return;
+            var fileID = SaveAPI.GetFilenameID(saveSlotFilename);
+            SaveAPI.DeleteAllCustomData(fileID);
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Deleting save {saveSlotFilename} in slot {slotId}");
-            SaveAPI.OnDeleteGame?.Invoke(slotId, saveSlotFilename, SaveAPI.GetFilenameID(saveSlotFilename));
+            SaveAPI.OnDeleteGame?.Invoke(slotId, saveSlotFilename, fileID);
         }
 
         [HarmonyPrefix]
@@ -44,9 +48,11 @@ namespace CommonAPI.Patches
         private static void AddNewSaveSlot_Prefix(SaveSlotHandler __instance, int saveSlotId)
         {
             var saveSlotFilename = __instance.GenerateNewSaveSlotFileName(saveSlotId);
+            var fileID = SaveAPI.GetFilenameID(saveSlotFilename);
+            SaveAPI.MakeNewForAllCustomData(fileID);
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Creating save {saveSlotFilename} in slot {saveSlotId}");
-            SaveAPI.OnNewGame?.Invoke(saveSlotId, saveSlotFilename, SaveAPI.GetFilenameID(saveSlotFilename));
+            SaveAPI.OnNewGame?.Invoke(saveSlotId, saveSlotFilename, fileID);
         }
     }
 }

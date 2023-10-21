@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,17 @@ namespace CommonAPI
         internal static bool AlreadyRanOnLoadStageInitialized = false;
         internal static bool AlreadyRanOnLoadStagePostInitialization = false;
 
+        private static List<CustomSaveData> _customSaveDatas = new List<CustomSaveData>();
+
+        public static void RegisterCustomSaveData(CustomSaveData customSaveData)
+        {
+            if (!customSaveData.Filename.Contains("{0}"))
+            {
+                throw new Exception("Can't register save data for " + customSaveData.GetType() +", Filename is missing a \"{0}\" token to differentiate save slots. Filename is: " + customSaveData.Filename);
+            }
+            _customSaveDatas.Add(customSaveData);
+        }
+
         internal static void Initialize()
         {
             StageManager.OnStageInitialized += StageManager_OnStageInitialized;
@@ -58,7 +70,9 @@ namespace CommonAPI
             var saveSlotFilename = Core.Instance.SaveManager.saveSlotHandler.GetSaveSlotFileName(slotId);
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogInfo($"Loading into save slot {slotId}, filename: {saveSlotFilename} (Initialized)");
-            OnLoadStageInitialized?.Invoke(slotId, saveSlotFilename, GetFilenameID(saveSlotFilename));
+            var fileID = GetFilenameID(saveSlotFilename);
+            LoadAllCustomData(fileID);
+            OnLoadStageInitialized?.Invoke(slotId, saveSlotFilename, fileID);
             AlreadyRanOnLoadStageInitialized = true;
         }
 
@@ -72,6 +86,72 @@ namespace CommonAPI
                 CommonAPIPlugin.Log.LogInfo($"Loading into save slot {slotId}, filename: {saveSlotFilename} (PostInitialiation)");
             OnLoadStagePostInitialization?.Invoke(slotId, saveSlotFilename, GetFilenameID(saveSlotFilename));
             AlreadyRanOnLoadStagePostInitialization = true;
+        }
+
+        internal static void DeleteAllCustomData(int fileID)
+        {
+            foreach (var savedata in _customSaveDatas)
+            {
+                var filename = savedata.GetFilenameForFileID(fileID);
+                if (File.Exists(filename))
+                {
+                    if (CommonAPISettings.Debug)
+                        CommonAPIPlugin.Log.LogInfo($"Deleting custom data for {savedata.GetType()}, file: {filename}");
+                    File.Delete(filename);
+                }
+            }
+        }
+
+        internal static void SaveAllCustomData(int fileID)
+        {
+            foreach(var savedata in _customSaveDatas)
+            {
+                var filename = savedata.GetFilenameForFileID(fileID);
+                if (CommonAPISettings.Debug)
+                    CommonAPIPlugin.Log.LogInfo($"Writing custom data for {savedata.GetType()}, file: {filename}");
+                var ms = new MemoryStream();
+                var writer = new BinaryWriter(ms);
+                savedata.Write(writer);
+                writer.Flush();
+                CustomStorage.Instance.WriteFile(ms, filename);
+                writer.Dispose();
+                ms.Dispose();
+            }
+        }
+
+        internal static void LoadAllCustomData(int fileID)
+        {
+            foreach(var savedata in _customSaveDatas)
+            {
+                var filename = savedata.GetFilenameForFileID(fileID);
+                if (File.Exists(filename))
+                {
+                    if (CommonAPISettings.Debug)
+                        CommonAPIPlugin.Log.LogInfo($"Loading custom data for {savedata.GetType()}, file: {filename}");
+                    var fs = new FileStream(filename, FileMode.Open);
+                    var reader = new BinaryReader(fs);
+                    savedata.Read(reader);
+                    reader.Dispose();
+                    fs.Dispose();
+                }
+                else
+                {
+                    if (CommonAPISettings.Debug)
+                        CommonAPIPlugin.Log.LogInfo($"Making new custom data for {savedata.GetType()}, file: {filename}");
+                    savedata.MakeNew();
+                }
+            }
+        }
+
+        internal static void MakeNewForAllCustomData(int fileID)
+        {
+            foreach (var savedata in _customSaveDatas)
+            {
+                var filename = savedata.GetFilenameForFileID(fileID);
+                if (CommonAPISettings.Debug)
+                    CommonAPIPlugin.Log.LogInfo($"Making new custom data for {savedata.GetType()}, file: {filename}");
+                savedata.MakeNew();
+            }
         }
         
         internal static int GetFilenameID(string filename)
