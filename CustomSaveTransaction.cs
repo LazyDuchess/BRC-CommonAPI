@@ -11,14 +11,15 @@ namespace CommonAPI
     {
         private string _path;
         private byte[] _data;
-        public CustomSaveTransaction(MemoryStream stream, string filepath)
+        public CustomSaveTransaction(byte[] data, string filepath)
         {
-            _data = stream.ToArray();
+            _data = data;
             _path = filepath;
         }
 
         public override void Process()
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(_path));
             File.WriteAllBytes(_path, _data);
         }
     }

@@ -59,7 +59,7 @@ namespace CommonAPI
         /// <summary>
         /// Enqueues a file write.
         /// </summary>
-        public void WriteFile(MemoryStream data, string path)
+        public void WriteFile(byte[] data, string path)
         {
             var transaction = new CustomSaveTransaction(data, path);
             _transactionQueue.Enqueue(transaction);

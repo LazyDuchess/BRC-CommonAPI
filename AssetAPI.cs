@@ -23,6 +23,16 @@ namespace CommonAPI
         }
 
         /// <summary>
+        /// Returns the graffiti art from the game.
+        /// </summary>
+        public static GraffitiArtInfo GetGraffitiArtInfo()
+        {
+            var assets = Core.Instance.Assets;
+            var grafArtInfo = assets.LoadAssetFromBundle<GraffitiArtInfo>("graffiti", "GraffitiArtInfo");
+            return grafArtInfo;
+        }
+
+        /// <summary>
         /// Returns a shader from the game.
         /// </summary>
         public static Shader GetShader(ShaderNames shaderName)

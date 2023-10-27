@@ -114,7 +114,8 @@ namespace CommonAPI
                 var writer = new BinaryWriter(ms);
                 savedata.Write(writer);
                 writer.Flush();
-                CustomStorage.Instance.WriteFile(ms, filename);
+                var data = ms.ToArray();
+                CustomStorage.Instance.WriteFile(data, filename);
                 writer.Dispose();
                 ms.Dispose();
             }
@@ -139,7 +140,7 @@ namespace CommonAPI
                 {
                     if (CommonAPISettings.Debug)
                         CommonAPIPlugin.Log.LogInfo($"Making new custom data for {savedata.GetType()}, file: {filename}");
-                    savedata.MakeNew();
+                    savedata.Initialize();
                 }
             }
         }
@@ -151,7 +152,7 @@ namespace CommonAPI
                 var filename = savedata.GetFilenameForFileID(fileID);
                 if (CommonAPISettings.Debug)
                     CommonAPIPlugin.Log.LogInfo($"Making new custom data for {savedata.GetType()}, file: {filename}");
-                savedata.MakeNew();
+                savedata.Initialize();
             }
         }
         

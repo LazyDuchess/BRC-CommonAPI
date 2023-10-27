@@ -30,7 +30,7 @@ namespace CommonAPI
         /// <summary>
         /// Called when creating a new save slot, or if the save slot being loaded doesn't have this custom data.
         /// </summary>
-        public virtual void MakeNew()
+        public virtual void Initialize()
         {
 
         }
