@@ -21,6 +21,7 @@ namespace CommonAPI
             try
             {
                 SaveAPI.Initialize();
+                CustomSequenceHandler.Initialize();
                 new CustomStorage();
                 var harmony = new Harmony(GUID);
                 harmony.PatchAll();
