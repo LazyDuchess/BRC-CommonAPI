@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace CommonAPI
 {
     public class CustomSequenceHandler : AMenuController
 	{
+		public const float DefaultExitDelay = 0.9f;
+		public const float DefaultDialogueDelay = 0.9f;
 		public static CustomSequenceHandler instance;
 		public CustomSequence sequence;
 		public bool disabledExit;
@@ -34,6 +37,7 @@ namespace CommonAPI
 		private float skipStartTimer;
 		private float skipThreshold = 0.4f;
 		private Coroutine exitSequenceRoutine;
+		private List<Coroutine> queuedSequenceActions = new List<Coroutine>();
 		internal bool allowPhoneOnAfterSequence;
 
 		internal CustomDialogue CurrentDialogue = null;
@@ -42,6 +46,17 @@ namespace CommonAPI
         {
 			StageManager.OnStagePostInitialization += StageManager_OnStagePostInitialization;
 		}
+
+		private IEnumerator StartDialogueCoroutine(CustomDialogue dialogue, float delay = DefaultDialogueDelay)
+        {
+			yield return new WaitForSeconds(DefaultDialogueDelay);
+			StartDialogue(dialogue);
+        }
+
+		public void StartDialogueDelayed(CustomDialogue dialogue, float delay = DefaultDialogueDelay)
+        {
+			queuedSequenceActions.Add(StartCoroutine(StartDialogueCoroutine(dialogue, delay)));
+        }
 
 		public void StartDialogue(CustomDialogue dialogue)
 		{
@@ -74,6 +89,17 @@ namespace CommonAPI
 			Core.OnCoreUpdatePaused += OnCoreUpdatePaused;
 			Core.OnCoreUpdateUnPaused += OnCoreUpdateUnPaused;
 		}
+
+		public void ExitCurrentSequenceDelayed(float delay = DefaultExitDelay)
+        {
+			queuedSequenceActions.Add(StartCoroutine(ExitCurrentSequenceDelayedCoroutine(delay)));
+        }
+
+		private IEnumerator ExitCurrentSequenceDelayedCoroutine(float delay = DefaultExitDelay)
+        {
+			yield return new WaitForSeconds(delay);
+			yield return ExitSequenceRoutine();
+        }
 
 		public void ExitCurrentSequence()
 		{
@@ -172,6 +198,8 @@ namespace CommonAPI
 
 		private IEnumerator ExitSequenceRoutine()
 		{
+			if (player.sequenceState == SequenceState.EXITING)
+				yield break;
 			player.sequenceState = SequenceState.EXITING;
 			Core coreInstance = Core.Instance;
 			EffectsUI effectsUI = this.uIManager.effects;
@@ -203,8 +231,20 @@ namespace CommonAPI
 		{
 		}
 
+		private void StopAllSequenceActions()
+        {
+			foreach(var routine in queuedSequenceActions)
+            {
+				if (routine == null)
+					continue;
+				StopCoroutine(routine);
+            }
+			queuedSequenceActions.Clear();
+        }
+
 		private void SetExitSequence()
 		{
+			StopAllSequenceActions();
 			if (this.hidePlayer)
 			{
 				this.player.HideForSequence(false);

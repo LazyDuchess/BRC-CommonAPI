@@ -50,6 +50,7 @@ namespace CommonAPI.Patches
             if (customSequenceHandler.CurrentDialogue == null)
                 return;
             customSequenceHandler.CurrentDialogue.NextDialogue = null;
+            customSequenceHandler.CurrentDialogue.EndSequenceOnFinish = false;
             customSequenceHandler.CurrentDialogue.OnDialogueEnd = null;
         }
 
@@ -68,7 +69,7 @@ namespace CommonAPI.Patches
             else
             {
                 if (currentDialogue.EndSequenceOnFinish)
-                    customSequenceHandler.ExitCurrentSequence();
+                    customSequenceHandler.ExitCurrentSequenceDelayed(CustomSequenceHandler.DefaultExitDelay);
                 customSequenceHandler.CurrentDialogue = null;
             }
             if (currentDialogue.OnDialogueEnd != null)
