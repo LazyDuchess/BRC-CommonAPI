@@ -10,6 +10,9 @@ using DG.Tweening;
 
 namespace CommonAPI
 {
+	/// <summary>
+	/// Like the SequenceHandler, but for custom sequences.
+	/// </summary>
     public class CustomSequenceHandler : AMenuController
 	{
 		public const float DefaultExitDelay = 0.9f;
@@ -413,7 +416,8 @@ namespace CommonAPI
 				uIManager.PushNewMenuInstant(this);
 			}
 			player.ui.gameObject.SetActive(false);
-			sequence.Play(player);
+			sequence.Init();
+			sequence.Play();
 			skipStartTimer = 0f;
 		}
 

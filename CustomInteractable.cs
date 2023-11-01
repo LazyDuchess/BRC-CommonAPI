@@ -8,6 +8,9 @@ using Reptile;
 
 namespace CommonAPI
 {
+    /// <summary>
+    /// Interactable object. Shows a button prompt when the player touches its trigger.
+    /// </summary>
     public class CustomInteractable : MonoBehaviour
     {
         public bool LookAt = true;
@@ -60,6 +63,9 @@ namespace CommonAPI
             return false;
         }
 
+        /// <summary>
+        /// Point the player's head will look at when touching the trigger.
+        /// </summary>
         public virtual Vector3 GetLookAtPos()
         {
             var lookTarget = transform.Find("LookTarget");
@@ -68,11 +74,18 @@ namespace CommonAPI
             return transform.position;
         }
 
+        /// <summary>
+        /// Test function for interaction, if this returns false then the prompt won't be shown and the player won't be able to interact with the object.
+        /// Called every tick the player is inside the trigger, and not busy or dead.
+        /// </summary>
         public virtual bool Test(Player player)
         {
             return true;
         }
 
+        /// <summary>
+        /// Called when the player interacts with the object.
+        /// </summary>
         public virtual void Interact(Player player)
         {
 
