@@ -18,6 +18,13 @@ namespace CommonAPI
         public string Filename;
 
         /// <summary>
+        /// Whether this save data will be auto-saved alongside the savegame slot. If not, you will manually have to queue a save by calling the Save() method, then the data will be saved next time the game saves your current slot.
+        /// </summary>
+        public bool AutoSave = true;
+
+        internal bool QueuedSave = false;
+
+        /// <summary>
         /// Default constructor. Given a plugin's name and a filename with a "{0}" token to format, will save the data inside BepInEx/config/(PluginName)/saves/(Filename).
         /// This constructor will also register the savedata into the SaveAPI.
         /// </summary>
@@ -43,6 +50,14 @@ namespace CommonAPI
         public virtual void Write(BinaryWriter writer)
         {
 
+        }
+
+        /// <summary>
+        /// Queues a save for the next time the current save slot saves. Doesn't do anything if this data has autosaves enabled.
+        /// </summary>
+        public void Save()
+        {
+            QueuedSave = true;
         }
 
         internal string GetFilenameForFileID(int fileID)

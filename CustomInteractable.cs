@@ -13,10 +13,38 @@ namespace CommonAPI
     /// </summary>
     public class CustomInteractable : MonoBehaviour
     {
+        /// <summary>
+        /// If true, will teleport the player to the "PlayerSnapPosition" GameObject inside this Interactable when a sequence is triggered from it.
+        /// </summary>
+        public bool PlacePlayerAtSnapPosition = true;
+        /// <summary>
+        /// If true, the player will look at the point returned by the GetLookAtPos method. By default, will try to find a "LookTarget" GameObject inside this Interactable.
+        /// </summary>
         public bool LookAt = true;
         public bool ShowRep = false;
         public InteractableIcon Icon = InteractableIcon.Talk;
         public Sprite CustomIcon;
+
+        internal void OnSequenceBegin(CustomSequence sequence)
+        {
+            if (!PlacePlayerAtSnapPosition)
+                return;
+            var snapPosition = transform.Find("PlayerSnapPosition");
+            if (snapPosition == null)
+                return;
+            WorldHandler.instance.PlacePlayerAt(sequence.player, snapPosition.position, snapPosition.rotation, true);
+            var playerSpawner = snapPosition.GetComponent<PlayerSpawner>();
+            if (playerSpawner != null)
+                playerSpawner.SetReached();
+        }
+
+        /// <summary>
+        /// Starts a sequence from this interactable.
+        /// </summary>
+        protected void StartEnteringSequence(CustomSequence sequence, bool setHidePlayer = false, bool setInterruptPlayer = true, bool instantly = false, bool setPausePlayer = true, bool setAllowPhoneOnAfterSequence = true, bool skippable = true, bool lowerVolumeDuringSequence = true, bool disabledExitOnInput = false)
+        {
+            CustomSequenceHandler.instance.StartEnteringSequence(sequence, this, setHidePlayer, setInterruptPlayer, instantly, setPausePlayer, setAllowPhoneOnAfterSequence, skippable, lowerVolumeDuringSequence, disabledExitOnInput);
+        }
 
         void OnTriggerStay(Collider other)
         {

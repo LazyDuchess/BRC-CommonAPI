@@ -107,6 +107,9 @@ namespace CommonAPI
         {
             foreach(var savedata in _customSaveDatas)
             {
+                if (!savedata.AutoSave && !savedata.QueuedSave)
+                    continue;
+                savedata.QueuedSave = false;
                 var filename = savedata.GetFilenameForFileID(fileID);
                 if (CommonAPISettings.Debug)
                     CommonAPIPlugin.Log.LogInfo($"Writing custom data for {savedata.GetType()}, file: {filename}");
@@ -125,6 +128,7 @@ namespace CommonAPI
         {
             foreach(var savedata in _customSaveDatas)
             {
+                savedata.QueuedSave = false;
                 var filename = savedata.GetFilenameForFileID(fileID);
                 if (File.Exists(filename))
                 {
@@ -149,6 +153,7 @@ namespace CommonAPI
         {
             foreach (var savedata in _customSaveDatas)
             {
+                savedata.QueuedSave = false;
                 var filename = savedata.GetFilenameForFileID(fileID);
                 if (CommonAPISettings.Debug)
                     CommonAPIPlugin.Log.LogInfo($"Making new custom data for {savedata.GetType()}, file: {filename}");

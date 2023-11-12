@@ -23,15 +23,31 @@
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>lib\Assembly-CSharp-publicized.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="CrewBoom">
+      <HintPath>lib\CrewBoom.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="CrewBoomAPI">
+      <HintPath>lib\CrewBoomAPI.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Reference Include="CrewBoomMono">
+      <HintPath>lib\CrewBoomMono.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="DOTween">
       <HintPath>lib\DOTween.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>lib\Unity.TextMeshPro.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>lib\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
 </Project>

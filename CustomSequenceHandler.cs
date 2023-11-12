@@ -19,6 +19,7 @@ namespace CommonAPI
 		public const float DefaultDialogueDelay = 0.9f;
 		public static CustomSequenceHandler instance;
 		public CustomSequence sequence;
+		public CustomInteractable interactable;
 		public bool disabledExit;
 		private GameInput gameInput;
 		private BaseModule baseModule;
@@ -304,8 +305,9 @@ namespace CommonAPI
 			this.uIManager.dialogueUI.FastForwardTypewriter();
 		}
 
-		public void StartEnteringSequence(CustomSequence setSequence, bool setHidePlayer = true, bool setInterruptPlayer = true, bool instantly = false, bool setPausePlayer = false, bool setAllowPhoneOnAfterSequence = true, bool skippable = true, bool lowerVolumeDuringSequence = false, bool disabledExitOnInput = false)
+		public void StartEnteringSequence(CustomSequence setSequence, CustomInteractable interactable = null, bool setHidePlayer = true, bool setInterruptPlayer = true, bool instantly = false, bool setPausePlayer = false, bool setAllowPhoneOnAfterSequence = true, bool skippable = true, bool lowerVolumeDuringSequence = false, bool disabledExitOnInput = false)
         {
+			this.interactable = interactable;
 			sequenceOverwritten = false;
 			if (IsInSequence() && player.sequenceState != SequenceState.PRE_ENTERING)
 			{
@@ -417,6 +419,8 @@ namespace CommonAPI
 			}
 			player.ui.gameObject.SetActive(false);
 			sequence.Init();
+			if (interactable != null)
+				interactable.OnSequenceBegin(sequence);
 			sequence.Play();
 			skipStartTimer = 0f;
 		}
