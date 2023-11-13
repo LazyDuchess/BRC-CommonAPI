@@ -3,10 +3,14 @@
   <PropertyGroup>
     <TargetFramework>net46</TargetFramework>
     <AssemblyName>CommonAPI</AssemblyName>
-    <Description>My first plugin</Description>
+    <Description>General Purpose API for BRC modding.</Description>
     <Version>1.0.0</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+	<ManagedPath>$(BRCPath)/Bomb Rush Cyberfunk_Data/Managed</ManagedPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +18,7 @@
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
     <PackageReference Include="UnityEngine.Modules" Version="2021.3.27" IncludeAssets="compile" />
+	<PackageReference Include="BepInEx.AssemblyPublicizer.MSBuild" Version="0.4.1" PrivateAssets="all" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
@@ -22,31 +27,20 @@
   
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>lib\Assembly-CSharp-publicized.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="CrewBoom">
-      <HintPath>lib\CrewBoom.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="CrewBoomAPI">
-      <HintPath>lib\CrewBoomAPI.dll</HintPath>
-      <Private>true</Private>
-    </Reference>
-    <Reference Include="CrewBoomMono">
-      <HintPath>lib\CrewBoomMono.dll</HintPath>
-      <Private>false</Private>
+      <HintPath>$(ManagedPath)/Assembly-CSharp.dll</HintPath>
+	  <Private>false</Private>
+	  <Publicize>true</Publicize>
     </Reference>
     <Reference Include="DOTween">
-      <HintPath>lib\DOTween.dll</HintPath>
+      <HintPath>$(ManagedPath)/DOTween.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>lib\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(ManagedPath)/Unity.TextMeshPro.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>lib\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(ManagedPath)/UnityEngine.UI.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

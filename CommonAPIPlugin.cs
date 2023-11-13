@@ -7,14 +7,11 @@ using BepInEx.Logging;
 
 namespace CommonAPI
 {
-    [BepInPlugin(GUID, Name, Version)]
+    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     internal class CommonAPIPlugin : BaseUnityPlugin
     {
         public static CommonAPIPlugin Instance;
         public static ManualLogSource Log => Instance.Logger;
-        private const string GUID = "com.LazyDuchess.BRC.CommonAPI";
-        private const string Name = "CommonAPI";
-        private const string Version = "1.0.0";
         private void Awake()
         {
             Instance = this;
@@ -23,13 +20,13 @@ namespace CommonAPI
                 SaveAPI.Initialize();
                 CustomSequenceHandler.Initialize();
                 new CustomStorage();
-                var harmony = new Harmony(GUID);
+                var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
                 harmony.PatchAll();
-                Logger.LogInfo($"{Name} {Version} loaded!");
+                Logger.LogInfo($"{PluginInfo.PLUGIN_GUID} {PluginInfo.PLUGIN_VERSION} loaded!");
             }
             catch(Exception e)
             {
-                Logger.LogError($"Problem loading {Name} {Version}: {e}");
+                Logger.LogError($"Problem loading {PluginInfo.PLUGIN_GUID} {PluginInfo.PLUGIN_VERSION}!{Environment.NewLine}{e}");
             }
         }
 

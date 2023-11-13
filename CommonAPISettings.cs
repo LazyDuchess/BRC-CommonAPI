@@ -8,6 +8,6 @@ namespace CommonAPI
 {
     internal class CommonAPISettings
     {
-        public static bool Debug = true;
+        public static bool Debug = false;
     }
 }
