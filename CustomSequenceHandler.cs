@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,19 +29,16 @@ namespace CommonAPI
 		private SequenceHandler.SkipState skipTextActiveState = SequenceHandler.SkipState.IDLE;
 		private float skipTextTimer;
 		public bool isBusy;
-		private bool invokeExitSequenceEvent = true;
-		private bool restartCurrentEncounter;
 		private bool hidePlayer;
 		private bool pausePlayer;
 		private bool interruptPlayer;
 		private bool lowerVolume;
-		private float fadeDuration = 0.4f;
+		private readonly float fadeDuration = 0.4f;
 		internal float shutDuration = 0.2f;
-		private float skipFadeDuration = 0.3f;
+		private readonly float skipFadeDuration = 0.3f;
 		private float skipStartTimer;
-		private float skipThreshold = 0.4f;
-		private Coroutine exitSequenceRoutine;
-		private List<Coroutine> queuedSequenceActions = new List<Coroutine>();
+		private readonly float skipThreshold = 0.4f;
+		private readonly List<Coroutine> queuedSequenceActions = new();
 		internal bool allowPhoneOnAfterSequence;
 
 		internal CustomDialogue CurrentDialogue = null;
@@ -74,7 +71,7 @@ namespace CommonAPI
 			dialogue.OnDialogueBegin?.Invoke();
 		}
 
-		static void StageManager_OnStagePostInitialization()
+		private static void StageManager_OnStagePostInitialization()
         {
 			var gameObject = new GameObject("Custom Sequence Handler");
 			gameObject.AddComponent<CustomSequenceHandler>().Init();
@@ -107,7 +104,7 @@ namespace CommonAPI
 
 		public void ExitCurrentSequence()
 		{
-			exitSequenceRoutine = StartCoroutine(ExitSequenceRoutine());
+			StartCoroutine(ExitSequenceRoutine());
 		}
 
 		public override void OnDestroy()
@@ -133,8 +130,8 @@ namespace CommonAPI
 				return;
 			if (player.sequenceState == SequenceState.IN_SEQUENCE)
 			{
-				DialogueUI dialogueUI = uIManager.dialogueUI;
-				bool flag = IsEnabled && !disabledExit && gameInput.GetButtonNew(2, 0);
+				var dialogueUI = uIManager.dialogueUI;
+				var flag = IsEnabled && !disabledExit && gameInput.GetButtonNew(2, 0);
 				if (flag && dialogueUI.CanBeSkipped && !dialogueUI.isYesNoPromptEnabled)
 				{
 					if (dialogueUI.ReadyToResume)
@@ -153,9 +150,9 @@ namespace CommonAPI
 				}
 				if (skipTextActiveState != SequenceHandler.SkipState.NOT_SKIPPABLE && !dialogueUI.isYesNoPromptEnabled)
 				{
-					EffectsUI effects = uIManager.effects;
-					float dt = Core.dt;
-					bool flag2 = IsEnabled && gameInput.GetButtonHeld(64, 0);
+					var effects = uIManager.effects;
+					var dt = Core.dt;
+					var flag2 = IsEnabled && gameInput.GetButtonHeld(64, 0);
 					if (skipStartTimer >= 0.5f)
 					{
 						if (skipTextActiveState == SequenceHandler.SkipState.TEXT_ACTIVE)
@@ -163,7 +160,7 @@ namespace CommonAPI
 							skipTextTimer += dt;
 							if (skipTextTimer > 1.5f && skipTimer == 0f)
 							{
-								Tween tween = effects.FadeSkipOut(skipFadeDuration, UpdateType.Manual);
+								var tween = effects.FadeSkipOut(skipFadeDuration, UpdateType.Manual);
 								tween.onComplete = (TweenCallback)Delegate.Combine(tween.onComplete, new TweenCallback(delegate
 								{
 									skipTextActiveState = SequenceHandler.SkipState.IDLE;
@@ -174,7 +171,7 @@ namespace CommonAPI
 						}
 						else if (skipTextActiveState == SequenceHandler.SkipState.IDLE && !flag && (gameInput.GetButtonHeld(64, 0) || gameInput.GetButtonHeld(4, 0)))
 						{
-							Tween tween2 = effects.FadeSkipIn(skipFadeDuration, UpdateType.Manual);
+							var tween2 = effects.FadeSkipIn(skipFadeDuration, UpdateType.Manual);
 							tween2.onComplete = (TweenCallback)Delegate.Combine(tween2.onComplete, new TweenCallback(delegate
 							{
 								skipTextActiveState = SequenceHandler.SkipState.TEXT_ACTIVE;
@@ -195,7 +192,7 @@ namespace CommonAPI
 				}
 				if (!disabledExit && (skipTimer >= skipThreshold))
 				{
-					exitSequenceRoutine = StartCoroutine(ExitSequenceRoutine());
+					StartCoroutine(ExitSequenceRoutine());
 				}
 			}
 		}
@@ -205,13 +202,13 @@ namespace CommonAPI
 			if (player.sequenceState == SequenceState.EXITING)
 				yield break;
 			player.sequenceState = SequenceState.EXITING;
-			Core coreInstance = Core.Instance;
-			EffectsUI effectsUI = this.uIManager.effects;
+			var coreInstance = Core.Instance;
+			var effectsUI = this.uIManager.effects;
 			skipTextActiveState = SequenceHandler.SkipState.EXITING_SEQUENCE;
 			effectsUI.FadeSkipOut(this.skipFadeDuration, UpdateType.Manual);
-			double num = (double)Time.deltaTime;
-			float stayBlackSeconds = this.fadeDuration;
-			Tween tween = effectsUI.FadeToBlack(fadeDuration);
+			var num = (double)Time.deltaTime;
+			var stayBlackSeconds = this.fadeDuration;
+			var tween = effectsUI.FadeToBlack(fadeDuration);
 			yield return tween.WaitForCompletion();
 			yield return new WaitForSeconds(shutDuration);
 			this.SetExitSequence();
@@ -223,7 +220,6 @@ namespace CommonAPI
 				this.isBusy = false;
 				effectsUI.HideVerticalBars();
 			}
-			this.exitSequenceRoutine = null;
 			yield break;
 		}
 
@@ -266,13 +262,13 @@ namespace CommonAPI
 			this.player.RecheckLoopingSounds();
 			this.sequence.time = 0.0;
 		    sequence.Stop();
-			WorldHandler worldHandler = WorldHandler.instance;
+			var worldHandler = WorldHandler.instance;
 			if (worldHandler)
 			{
-				Player currentPlayer = worldHandler.GetCurrentPlayer();
+				var currentPlayer = worldHandler.GetCurrentPlayer();
 				if (currentPlayer != null)
 				{
-					GameplayCamera cam = currentPlayer.cam;
+					var cam = currentPlayer.cam;
 					if (cam != null && worldHandler.CurrentCamera != cam.cam)
 					{
 						worldHandler.CurrentCamera.enabled = false;
@@ -332,8 +328,6 @@ namespace CommonAPI
 			skipTextActiveState = (skippable ? SequenceHandler.SkipState.IDLE : SequenceHandler.SkipState.NOT_SKIPPABLE);
 			skipTextTimer = 0f;
 			isBusy = true;
-			invokeExitSequenceEvent = true;
-			restartCurrentEncounter = false;
 			hidePlayer = setHidePlayer;
 			allowPhoneOnAfterSequence = setAllowPhoneOnAfterSequence;
 			interruptPlayer = setInterruptPlayer;
@@ -427,7 +421,7 @@ namespace CommonAPI
 
 		private void SetInSequenceImmediate()
 		{
-			EffectsUI effects = uIManager.effects;
+			var effects = uIManager.effects;
 			if (!effects.IsFadedToColor(EffectsUI.niceClear))
 			{
 				effects.FadeOpen(0f);

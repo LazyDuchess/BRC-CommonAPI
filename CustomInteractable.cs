@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,7 +46,7 @@ namespace CommonAPI
             CustomSequenceHandler.instance.StartEnteringSequence(sequence, this, setHidePlayer, setInterruptPlayer, instantly, setPausePlayer, setAllowPhoneOnAfterSequence, skippable, lowerVolumeDuringSequence, disabledExitOnInput);
         }
 
-        void OnTriggerStay(Collider other)
+        private void OnTriggerStay(Collider other)
         {
             var player = other.GetComponentInChildren<Player>();
             if (!player)

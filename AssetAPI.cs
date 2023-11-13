@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ namespace CommonAPI
     /// </summary>
     public static class AssetAPI
     {
-        private static Dictionary<ShaderNames, Shader> CachedShaders = new Dictionary<ShaderNames, Shader>();
+        private static readonly Dictionary<ShaderNames, Shader> CachedShaders = new();
         public enum ShaderNames
         {
             AmbientCharacter,
@@ -37,7 +37,7 @@ namespace CommonAPI
         /// </summary>
         public static Shader GetShader(ShaderNames shaderName)
         {
-            if (CachedShaders.TryGetValue(shaderName, out Shader result))
+            if (CachedShaders.TryGetValue(shaderName, out var result))
             {
                 if (result != null)
                     return result;
