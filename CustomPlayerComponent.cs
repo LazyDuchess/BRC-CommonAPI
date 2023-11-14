@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,7 +28,7 @@ namespace CommonAPI
             return comp;
         }
 
-        void Init()
+        private void Init()
         {
             if (_player.ui == null)
                 return;
