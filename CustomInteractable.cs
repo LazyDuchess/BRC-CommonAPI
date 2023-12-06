@@ -41,7 +41,7 @@ namespace CommonAPI
         /// <summary>
         /// Starts a sequence from this interactable.
         /// </summary>
-        protected void StartEnteringSequence(CustomSequence sequence, bool setHidePlayer = false, bool setInterruptPlayer = true, bool instantly = false, bool setPausePlayer = true, bool setAllowPhoneOnAfterSequence = true, bool skippable = true, bool lowerVolumeDuringSequence = true, bool disabledExitOnInput = false)
+        public void StartEnteringSequence(CustomSequence sequence, bool setHidePlayer = false, bool setInterruptPlayer = true, bool instantly = false, bool setPausePlayer = true, bool setAllowPhoneOnAfterSequence = true, bool skippable = true, bool lowerVolumeDuringSequence = true, bool disabledExitOnInput = false)
         {
             CustomSequenceHandler.instance.StartEnteringSequence(sequence, this, setHidePlayer, setInterruptPlayer, instantly, setPausePlayer, setAllowPhoneOnAfterSequence, skippable, lowerVolumeDuringSequence, disabledExitOnInput);
         }
