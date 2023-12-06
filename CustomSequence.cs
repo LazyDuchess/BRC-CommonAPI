@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Linq;
 using System.Text;
@@ -49,7 +49,7 @@ namespace CommonAPI
         /// <summary>
         /// Show a custom dialogue.
         /// </summary>
-        protected void StartDialogue(CustomDialogue dialogue, float delay = CustomSequenceHandler.DefaultDialogueDelay)
+        public void StartDialogue(CustomDialogue dialogue, float delay = CustomSequenceHandler.DefaultDialogueDelay)
         {
             CustomSequenceHandler.instance.StartDialogueDelayed(dialogue, delay);
         }
@@ -57,7 +57,7 @@ namespace CommonAPI
         /// <summary>
         /// End this sequence. Call this when you're finished.
         /// </summary>
-        protected void ExitSequence(float delay = CustomSequenceHandler.DefaultExitDelay)
+        public void ExitSequence(float delay = CustomSequenceHandler.DefaultExitDelay)
         {
             CustomSequenceHandler.instance.ExitCurrentSequenceDelayed(delay);
         }
@@ -65,7 +65,7 @@ namespace CommonAPI
         /// <summary>
         /// Sets the cutscene camera. Camera GameObject must have a CameraRegisterer component.
         /// </summary>
-        protected void SetCamera(GameObject camera)
+        public void SetCamera(GameObject camera)
         {
             if (CurrentCamera != null)
                 CurrentCamera.SetActive(false);
@@ -77,7 +77,7 @@ namespace CommonAPI
         /// <summary>
         /// Shows a Yes/No prompt on the current dialogue. The answer will be stored in the AnsweredYes field of the custom dialogue.
         /// </summary>
-        protected void RequestYesNoPrompt()
+        public void RequestYesNoPrompt()
         {
             dialogueUI.RequestYesNoPrompt(DialogueBehaviour.DialogueType.YES_NO_GENERIC);
         }
