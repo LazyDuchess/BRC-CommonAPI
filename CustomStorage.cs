@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace CommonAPI
     /// </summary>
     public class CustomStorage
     {
-        internal static CustomStorage Instance;
+        public static CustomStorage Instance;
         private Thread _storageThread;
         private bool _running = true;
         private Queue<CustomTransaction> _transactionQueue = new Queue<CustomTransaction>();
