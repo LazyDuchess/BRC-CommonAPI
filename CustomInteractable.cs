@@ -24,7 +24,6 @@ namespace CommonAPI
         public bool ShowRep = false;
         public InteractableIcon Icon = InteractableIcon.Talk;
         public Sprite CustomIcon;
-        public Player CurrentPlayer = null;
 
         internal void OnSequenceBegin(CustomSequence sequence)
         {
@@ -78,7 +77,6 @@ namespace CommonAPI
                 return false;
             if (!Test(player))
                 return false;
-            CurrentPlayer = player;
             playerComponent.CurrentCustomInteractable = this;
             playerComponent.CustomInteractableContextAvailable = 10;
             if (ShowRep)
@@ -91,10 +89,6 @@ namespace CommonAPI
                 return true;
             }
             return false;
-        }
-
-        private void FixedUpdate() {
-            CurrentPlayer = null;
         }
 
         /// <summary>
