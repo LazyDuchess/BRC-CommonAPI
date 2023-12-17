@@ -26,7 +26,7 @@ namespace CommonAPI
 		private Player player;
 		private bool sequenceOverwritten;
 		private float skipTimer;
-		private SequenceHandler.SkipState skipTextActiveState = SequenceHandler.SkipState.IDLE;
+		public SequenceHandler.SkipState skipTextActiveState = SequenceHandler.SkipState.IDLE;
 		private float skipTextTimer;
 		public bool isBusy;
 		private bool hidePlayer;
