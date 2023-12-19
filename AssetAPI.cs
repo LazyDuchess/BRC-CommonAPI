@@ -14,12 +14,18 @@ namespace CommonAPI
     public static class AssetAPI
     {
         private static readonly Dictionary<ShaderNames, Shader> CachedShaders = new();
+        private static readonly Dictionary<MaterialNames, Material> CachedMaterials = new();
         public enum ShaderNames
         {
             AmbientCharacter,
             AmbientEnvironment,
             AmbientEnvironmentCutout,
             AmbientEnvironmentTransparent
+        }
+
+        public enum MaterialNames {
+            ToonWaterPyramid,
+            OasisWater
         }
 
         /// <summary>
@@ -30,6 +36,25 @@ namespace CommonAPI
             var assets = Core.Instance.Assets;
             var grafArtInfo = assets.LoadAssetFromBundle<GraffitiArtInfo>("graffiti", "GraffitiArtInfo");
             return grafArtInfo;
+        }
+
+        public static Material GetMaterial(MaterialNames materialName) {
+            if (CachedMaterials.TryGetValue(materialName, out var result)) {
+                if (result != null) return result;
+            }
+            var assets = Core.Instance.Assets;
+            switch (materialName) {
+                case MaterialNames.ToonWaterPyramid:
+                    var pyramidMat = assets.LoadAssetFromBundle<Material>("common_assets", "ToonWater_Pyramid");
+                    CacheMaterial(materialName, pyramidMat);
+                    return pyramidMat;
+
+                case MaterialNames.OasisWater:
+                    var oasisMat = assets.LoadAssetFromBundle<Material>("common_assets", "OasisWater");
+                    CacheMaterial(materialName, oasisMat);
+                    return oasisMat;
+            }
+            throw new ArgumentOutOfRangeException("materialName", "Material name is out of range!");
         }
 
         /// <summary>
@@ -74,6 +99,10 @@ namespace CommonAPI
         private static void CacheShader(ShaderNames shaderName, Shader shader)
         {
             CachedShaders[shaderName] = shader;
+        }
+
+        private static void CacheMaterial(MaterialNames materialName, Material material) {
+            CachedMaterials[materialName] = material;
         }
     }
 }
