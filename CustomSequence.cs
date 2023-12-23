@@ -40,6 +40,8 @@ namespace CommonAPI
         /// </summary>
         public virtual void Stop()
         {
+            if (this.dialogueUI.isYesNoPromptEnabled)
+                this.dialogueUI.DisableYesNoPrompt();
             this.effectsUI.HideBars(0.25f, UpdateType.Manual);
             player.sequenceState = SequenceState.NONE;
             if (CurrentCamera != null)
