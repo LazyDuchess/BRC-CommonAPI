@@ -6,21 +6,19 @@ using System.Threading.Tasks;
 using Reptile;
 using UnityEngine;
 
-namespace CommonAPI
-{
+namespace CommonAPI {
     /// <summary>
     /// Provides methods to more easily load assets from the game's asset bundles.
     /// </summary>
-    public static class AssetAPI
-    {
+    public static class AssetAPI {
         private static readonly Dictionary<ShaderNames, Shader> CachedShaders = new();
         private static readonly Dictionary<MaterialNames, Material> CachedMaterials = new();
-        public enum ShaderNames
-        {
+        public enum ShaderNames {
             AmbientCharacter,
             AmbientEnvironment,
             AmbientEnvironmentCutout,
-            AmbientEnvironmentTransparent
+            AmbientEnvironmentTransparent,
+            AmbientEnvironmentGlass
         }
 
         public enum MaterialNames {
@@ -31,8 +29,7 @@ namespace CommonAPI
         /// <summary>
         /// Returns the graffiti art from the game.
         /// </summary>
-        public static GraffitiArtInfo GetGraffitiArtInfo()
-        {
+        public static GraffitiArtInfo GetGraffitiArtInfo() {
             var assets = Core.Instance.Assets;
             var grafArtInfo = assets.LoadAssetFromBundle<GraffitiArtInfo>("graffiti", "GraffitiArtInfo");
             return grafArtInfo;
@@ -60,16 +57,19 @@ namespace CommonAPI
         /// <summary>
         /// Returns a shader from the game.
         /// </summary>
-        public static Shader GetShader(ShaderNames shaderName)
-        {
-            if (CachedShaders.TryGetValue(shaderName, out var result))
-            {
+        public static Shader GetShader(ShaderNames shaderName) {
+            if (CachedShaders.TryGetValue(shaderName, out var result)) {
                 if (result != null)
                     return result;
             }
             var assets = Core.Instance.Assets;
-            switch(shaderName)
-            {
+            switch (shaderName) {
+                case ShaderNames.AmbientEnvironmentGlass:
+                    var glassMat = assets.LoadAssetFromBundle<Material>("common_assets", "glass");
+                    var glassShader = glassMat.shader;
+                    CacheShader(shaderName, glassShader);
+                    return glassShader;
+
                 case ShaderNames.AmbientCharacter:
                     var shellMat = assets.LoadAssetFromBundle<Material>("common_assets", "shell");
                     var shellShader = shellMat.shader;
@@ -96,8 +96,7 @@ namespace CommonAPI
             }
             throw new ArgumentOutOfRangeException("shaderName", "Shader name is out of range!");
         }
-        private static void CacheShader(ShaderNames shaderName, Shader shader)
-        {
+        private static void CacheShader(ShaderNames shaderName, Shader shader) {
             CachedShaders[shaderName] = shader;
         }
 
