@@ -15,18 +15,32 @@ namespace CommonAPI.Patches {
         [HarmonyPostfix]
         [HarmonyPatch(nameof(AppHomeScreen.Awake))]
         private static void Awake_Postfix(AppHomeScreen __instance) {
-            var apps = __instance.m_Apps.ToList();
-            foreach(var app in InternalPhoneUtility.Apps) {
-                AddApp(app, ref apps);
+            var availableApps = __instance.availableHomeScreenApps.ToList();
+            foreach(var app in PhoneAPI.Apps) {
+                AddApp(app, ref availableApps);
             }
-            __instance.m_Apps = apps.ToArray();
+            __instance.availableHomeScreenApps = availableApps.ToArray();
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(nameof(AppHomeScreen.OnAppEnable))]
+        private static void OnAppEnable_Postfix(AppHomeScreen __instance) {
+            var availableCustomApps = __instance.availableHomeScreenApps.Where(x => PhoneAPI.PhoneAppByTypeName.ContainsKey(x.AppName));
+            foreach(var app in availableCustomApps) {
+                var appInstance = __instance.AppInstance(app.AppName) as CustomApp;
+                if (appInstance == null) continue;
+                if (appInstance.Available)
+                    __instance.AddApp(app);
+                else
+                    __instance.RemoveApp(app);
+            }
         }
 
         private static void AddApp(RegisteredPhoneApp app, ref List<HomeScreenApp> apps) {
             var appInstance = ScriptableObject.CreateInstance<HomeScreenApp>();
-            appInstance.m_AppName = app.AppType.FullName;
-            appInstance.m_DisplayName = app.Metadata.Title;
-            appInstance.m_AppIcon = app.Metadata.Icon;
+            appInstance.m_AppName = app.AppType.Name;
+            appInstance.m_DisplayName = app.Title;
+            appInstance.m_AppIcon = app.Icon;
             appInstance.appType = HomeScreenApp.HomeScreenAppType.NONE;
             apps.Add(appInstance);
         }
