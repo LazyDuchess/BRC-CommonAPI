@@ -1,9 +1,10 @@
-﻿using BepInEx;
+using BepInEx;
 using Reptile;
 using UnityEngine;
 using HarmonyLib;
 using System;
 using BepInEx.Logging;
+using CommonAPI.Phone;
 
 namespace CommonAPI
 {
@@ -17,6 +18,7 @@ namespace CommonAPI
             Instance = this;
             try
             {
+                InternalPhoneUtility.RegisterAllApps();
                 SaveAPI.Initialize();
                 CustomSequenceHandler.Initialize();
                 new CustomStorage();
