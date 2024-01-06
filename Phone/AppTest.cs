@@ -13,7 +13,7 @@ namespace CommonAPI.Phone {
             ScrollView = PhoneScrollView.Create(this);
 
             for(var i = 0; i < 10; i++) {
-                var button = SimplePhoneButton.Create("Yes! Sir!");
+                var button = PhoneUIUtility.CreateSimpleButton("This is a test button to test things.");
                 button.OnConfirm += () => {
                     MyPhone.OpenApp(typeof(Reptile.Phone.AppCamera));
                 };
