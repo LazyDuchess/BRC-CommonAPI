@@ -20,7 +20,7 @@ namespace CommonAPI.Phone {
         /// </summary>
         public virtual int Unread { get; } = 0;
         /// <summary>
-        /// Whether the app should show up on the phone.
+        /// Whether the app should show up on the phone homescreen.
         /// </summary>
         public virtual bool Available { get; } = true;
         public PhoneScrollView ScrollView = null;
