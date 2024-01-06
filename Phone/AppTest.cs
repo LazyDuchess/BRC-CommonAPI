@@ -1,3 +1,4 @@
+using Reptile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,15 @@ namespace CommonAPI.Phone {
         public override void OnAppInit() {
             base.OnAppInit();
             CreateIconlessTitleBar("Test App");
-            var scrollview = PhoneScrollView.Create(this);
-            var button = SimplePhoneButton.Create();
-            scrollview.AddButton(button);
+            ScrollView = PhoneScrollView.Create(this);
+
+            for(var i = 0; i < 10; i++) {
+                var button = SimplePhoneButton.Create("Yes! Sir!");
+                button.OnConfirm += () => {
+                    MyPhone.OpenApp(typeof(Reptile.Phone.AppCamera));
+                };
+                ScrollView.AddButton(button);
+            }
         }
     }
 }

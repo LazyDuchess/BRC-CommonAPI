@@ -16,7 +16,17 @@ public static class AppUtility {
     // Height = Phone screen height - the status at the top (160 in size)
     public static readonly Vector2 AppSize = new Vector2(1070, 1740);
 
-    public static App CreateApp(Type appType, Transform root){
+    public static TMP_FontAsset GetAppFont() {
+        var player = WorldHandler.instance.GetCurrentPlayer();
+        var phone = player.phone;
+        var sourceApp = phone.GetAppInstance<AppGraffiti>();
+        var overlay = sourceApp.transform.Find("Overlay");
+        var icons = overlay.transform.Find("Icons");
+        var header = icons.Find("HeaderLabel");
+        return header.GetComponent<TextMeshProUGUI>().font;
+    }
+
+    internal static App CreateApp(Type appType, Transform root){
         var appObject = new GameObject(appType.Name);
         appObject.layer = Layers.Phone;
 

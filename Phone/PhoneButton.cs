@@ -9,6 +9,13 @@ namespace CommonAPI.Phone {
     public abstract class PhoneButton : MonoBehaviour {
         public abstract float Width { get; }
         public abstract float Height { get; }
-        public Action OnPressed;
+        public Action OnConfirm;
+
+        public virtual void PlayHighlightAnimation() { }
+        public virtual void PlayDeselectAnimation(bool skip = false) { }
+        public virtual void PlayHoldAnimation() { }
+        public virtual void Confirm() {
+            OnConfirm?.Invoke();
+        }
     }
 }

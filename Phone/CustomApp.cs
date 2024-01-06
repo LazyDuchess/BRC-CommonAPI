@@ -14,7 +14,7 @@ namespace CommonAPI.Phone {
     /// Base class for custom phone apps.
     /// </summary>
     public abstract class CustomApp : App {
-        public const float TitleBarHeight = 300f;
+        public const float TitleBarHeight = 275f;
         /// <summary>
         /// For unread indicator in the homescreen.
         /// </summary>
@@ -23,9 +23,62 @@ namespace CommonAPI.Phone {
         /// Whether the app should show up on the phone.
         /// </summary>
         public virtual bool Available { get; } = true;
+        public PhoneScrollView ScrollView = null;
 
         public override void OnAppInit() {
             this.m_Unlockables = Array.Empty<AUnlockable>();
+        }
+
+        public override void OnReleaseRight() {
+            base.OnReleaseRight();
+            ScrollView?.OnReleaseRight();
+        }
+
+        public override void OnPressRight() {
+            base.OnPressRight();
+            ScrollView?.OnPressRight();
+        }
+
+        public override void OnPressUp() {
+            base.OnPressUp();
+            ScrollView?.OnPressUp();
+        }
+
+        public override void OnPressDown() {
+            base.OnPressDown();
+            ScrollView?.OnPressDown();
+        }
+
+        public override void OnHoldDown() {
+            base.OnHoldDown();
+            ScrollView?.OnHoldDown();
+        }
+
+        public override void OnHoldUp() {
+            base.OnHoldUp();
+            ScrollView?.OnHoldUp();
+        }
+
+        public override void OnReleaseDown() {
+            base.OnReleaseDown();
+            ScrollView?.OnReleaseDown();
+        }
+
+        public override void OnReleaseUp() {
+            base.OnReleaseUp();
+            ScrollView?.OnReleaseUp();
+        }
+
+        public void PlayBackSFX() {
+            m_AudioManager.PlaySfxGameplay(SfxCollectionID.PhoneSfx, AudioClipID.FlipPhone_Back, 0f);
+        }
+
+        public void PlayConfirmSFX() {
+            m_AudioManager.PlaySfxGameplay(SfxCollectionID.PhoneSfx, AudioClipID.FlipPhone_Confirm, 0f);
+        }
+
+        public void PlaySelectSFX() {
+            m_AudioManager.PlaySfxGameplay(SfxCollectionID.PhoneSfx, AudioClipID.FlipPhone_Select, 0f);
         }
 
         /// <summary>
