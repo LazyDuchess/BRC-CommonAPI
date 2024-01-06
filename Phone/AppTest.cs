@@ -9,6 +9,9 @@ namespace CommonAPI.Phone {
         public override void OnAppInit() {
             base.OnAppInit();
             CreateIconlessTitleBar("Test App");
+            var scrollview = PhoneScrollView.Create(this);
+            var button = SimplePhoneButton.Create();
+            scrollview.AddButton(button);
         }
     }
 }

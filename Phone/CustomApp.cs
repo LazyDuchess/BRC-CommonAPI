@@ -14,6 +14,7 @@ namespace CommonAPI.Phone {
     /// Base class for custom phone apps.
     /// </summary>
     public abstract class CustomApp : App {
+        public const float TitleBarHeight = 300f;
         /// <summary>
         /// For unread indicator in the homescreen.
         /// </summary>
