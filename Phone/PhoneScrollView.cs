@@ -64,6 +64,10 @@ namespace CommonAPI.Phone {
             UpdateButtons();
         }
 
+        public bool HasButton(PhoneButton button) {
+            return Buttons.Contains(button);
+        }
+
         public void StartScrollAnimation() {
             StartCoroutine(AnimateScrollCoroutine());
         }
