@@ -77,14 +77,6 @@ namespace CommonAPI.Phone {
             UpdateButtons();
         }
 
-        public void RemoveAllButtons() {
-            foreach(var button in Buttons) {
-                button.transform.SetParent(null);
-            }
-            Buttons.Clear();
-            UpdateButtons();
-        }
-
         public bool HasButton(PhoneButton button) {
             return Buttons.Contains(button);
         }
