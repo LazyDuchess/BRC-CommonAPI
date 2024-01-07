@@ -1,5 +1,5 @@
 # CommonAPI
-CommonAPI is a plugin library for Bomb Rush Cyberfunk, which allows modders to do a variety of things more easily.
+CommonAPI is a general purpose plugin library for Bomb Rush Cyberfunk, which allows modders to do a variety of things more easily.
 
 CommonAPI was used in the Millenium Winterland SlopCrew event to drive the NPCs, cutscenes and progress saving.
 ![Santa NPC](https://github.com/LazyDuchess/BRC-CommonAPI/assets/42678262/cc7c8663-89bb-4c5d-aee7-e545fc3d3562)
