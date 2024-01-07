@@ -41,6 +41,14 @@ namespace CommonAPI.Phone {
             return scrollViewComponent;
         }
 
+        public void ValidateSelectedIndex() {
+            if (SelectedIndex < 0)
+                SelectedIndex = 0;
+
+            if (SelectedIndex >= Buttons.Count)
+                SelectedIndex = Buttons.Count - 1;
+        }
+
         /// <summary>
         /// Adds a button and updates the scroll view.
         /// </summary>
@@ -193,6 +201,7 @@ namespace CommonAPI.Phone {
         /// Updates the animations and positioning of all buttons.
         /// </summary>
         public void UpdateButtons() {
+            ValidateSelectedIndex();
             var currentY = Separation;
             for (var i = 0; i < Buttons.Count; i++) {
                 var button = Buttons[i];
