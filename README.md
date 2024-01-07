@@ -18,3 +18,6 @@ Check out the [CommonAPI Sample Project](https://github.com/LazyDuchess/BRC-Comm
 
 ## Building
 Make sure you have a `BRCPath` environment variable defined on your system, which points to the root folder of your Bomb Rush Cyberfunk installation. This way the project can find the required DLLs.
+
+## Usage
+Do **NOT** bundle this assembly with your plugins - Simply add it as a reference in your projects and utilize the `dependencies` section in your plugin's `manifest.json` to add CommonAPI as a dependency, and do the same with the `[BepInDependency]` attribute in your BepInEx plugin class.
