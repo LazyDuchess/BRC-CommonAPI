@@ -58,9 +58,30 @@ namespace CommonAPI.Phone {
             UpdateButtons();
         }
 
+        public void InsertButton(int index, PhoneButton button) {
+            button.transform.SetParent(transform, false);
+            Buttons.Insert(index, button);
+            UpdateButtons();
+        }
+
+        public void RemoveButton(int index) {
+            var button = Buttons[index];
+            button.transform.SetParent(null);
+            Buttons.RemoveAt(index);
+            UpdateButtons();
+        }
+
         public void RemoveButton(PhoneButton button) {
             button.transform.SetParent(null);
             Buttons.Remove(button);
+            UpdateButtons();
+        }
+
+        public void RemoveAllButtons() {
+            foreach(var button in Buttons) {
+                button.transform.SetParent(null);
+            }
+            Buttons.Clear();
             UpdateButtons();
         }
 
