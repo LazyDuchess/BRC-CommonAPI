@@ -50,6 +50,12 @@ namespace CommonAPI.Phone {
             UpdateButtons();
         }
 
+        public void RemoveButton(PhoneButton button) {
+            button.transform.SetParent(null);
+            Buttons.Remove(button);
+            UpdateButtons();
+        }
+
         public void StartScrollAnimation() {
             StartCoroutine(AnimateScrollCoroutine());
         }
