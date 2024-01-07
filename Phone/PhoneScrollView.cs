@@ -5,6 +5,9 @@ using System.Collections;
 using Reptile.Phone;
 
 namespace CommonAPI.Phone {
+    /// <summary>
+    /// UI Element that scrolls through buttons in a phone app.
+    /// </summary>
     public class PhoneScrollView : MonoBehaviour {
         public const float DefaultLength = 1600f;
         public float AnimationSpeed = 0.1f;
@@ -17,6 +20,12 @@ namespace CommonAPI.Phone {
         public float CurrentScroll = 0f;
         private float continuousScrollTimer;
 
+        /// <summary>
+        /// Create an empty scroll view.
+        /// </summary>
+        /// <param name="app">App this scroll view belongs to.</param>
+        /// <param name="height">Height at which this scroll view begins, under the title bar by default.</param>
+        /// <param name="length">Length of this scroll view.</param>
         public static PhoneScrollView Create(CustomApp app, float height = CustomApp.TitleBarHeight, float length = DefaultLength) {
             var scrollview = new GameObject("Scroll View");
             scrollview.transform.SetParent(app.Content, false);
@@ -32,6 +41,9 @@ namespace CommonAPI.Phone {
             return scrollViewComponent;
         }
 
+        /// <summary>
+        /// Adds a button and updates the scroll view.
+        /// </summary>
         public void AddButton(PhoneButton button) {
             button.transform.SetParent(transform, false);
             Buttons.Add(button);
@@ -138,6 +150,9 @@ namespace CommonAPI.Phone {
             }
         }
 
+        /// <summary>
+        /// Resets the scroll and selected item back to zero and updates the buttons.
+        /// </summary>
         public void ResetScroll() {
             SelectedIndex = 0;
             CurrentScroll = 0f;
@@ -168,7 +183,10 @@ namespace CommonAPI.Phone {
             }
         }
 
-        private void UpdateButtons() {
+        /// <summary>
+        /// Updates the animations and positioning of all buttons.
+        /// </summary>
+        public void UpdateButtons() {
             var currentY = Separation;
             for (var i = 0; i < Buttons.Count; i++) {
                 var button = Buttons[i];

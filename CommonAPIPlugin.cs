@@ -22,7 +22,7 @@ namespace CommonAPI
                 SaveAPI.Initialize();
                 CustomSequenceHandler.Initialize();
                 new CustomStorage();
-                //PhoneAPI.RegisterApp<AppTest>("test app");
+                PhoneAPI.RegisterApp<AppTest>("test app");
                 var harmony = new Harmony(PluginInfo.PLUGIN_GUID);
                 harmony.PatchAll();
                 Logger.LogInfo($"{PluginInfo.PLUGIN_GUID} {PluginInfo.PLUGIN_VERSION} loaded!");

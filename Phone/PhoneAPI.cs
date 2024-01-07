@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace CommonAPI.Phone {
+
+    /// <summary>
+    /// Interface with phone apps.
+    /// </summary>
     public static class PhoneAPI {
         internal static List<RegisteredPhoneApp> Apps = null;
         internal static Dictionary<string, RegisteredPhoneApp> PhoneAppByTypeName = null;
@@ -26,6 +30,9 @@ namespace CommonAPI.Phone {
             PhoneAppByTypeName[appType.Name] = phoneApp;
         }
 
+        /// <summary>
+        /// Register a custom phone app.
+        /// </summary>
         public static void RegisterApp<T>(string title, Sprite icon = null) where T : CustomApp {
             RegisterApp(typeof(T), title, icon);
         }

@@ -9,6 +9,9 @@ namespace CommonAPI.Phone {
     public abstract class PhoneButton : MonoBehaviour {
         public abstract float Width { get; }
         public abstract float Height { get; }
+        /// <summary>
+        /// Action to take when the user presses this button.
+        /// </summary>
         public Action OnConfirm;
 
         public virtual void PlayHighlightAnimation() { }

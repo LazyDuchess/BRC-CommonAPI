@@ -10,7 +10,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace CommonAPI.Phone {
+    /// <summary>
+    /// Utility class for creating Phone UI elements.
+    /// </summary>
     public static class PhoneUIUtility {
+        /// <summary>
+        /// Creates a small button with a label.
+        /// </summary>
         public static SimplePhoneButton CreateSimpleButton(string label) {
             var buttonGameObject = new GameObject("Simple Button");
             buttonGameObject.layer = Layers.Phone;
@@ -45,6 +51,14 @@ namespace CommonAPI.Phone {
             var labelRect = labelGO.RectTransform();
             labelRect.SetAnchorAndPivot(0f, 0.5f);
             labelGO.RectTransform().sizeDelta = new Vector2(850f, 100f);
+            button.ConfirmArrow = new GameObject("Confirm Arrow");
+            button.ConfirmArrow.layer = Layers.Phone;
+            button.ConfirmArrow.transform.SetParent(buttonAnimationParent.transform, false);
+            var confirmArrowImage = button.ConfirmArrow.AddComponent<Image>();
+            confirmArrowImage.sprite = SimplePhoneButton.ConfirmArrowSprite;
+            var arrowRect = button.ConfirmArrow.RectTransform();
+            arrowRect.sizeDelta = new Vector2(SimplePhoneButton.ConfirmArrowWidth, SimplePhoneButton.ConfirmArrowHeight);
+            arrowRect.localPosition = new Vector3(425f, 0f, 0f);
             return button;
         }
     }
