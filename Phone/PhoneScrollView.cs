@@ -58,12 +58,18 @@ namespace CommonAPI.Phone {
             UpdateButtons();
         }
 
+        /// <summary>
+        /// Inserts a button at the specified index.
+        /// </summary>
         public void InsertButton(int index, PhoneButton button) {
             button.transform.SetParent(transform, false);
             Buttons.Insert(index, button);
             UpdateButtons();
         }
 
+        /// <summary>
+        /// Removes a button from this scrollview by its index. Does not destroy it.
+        /// </summary>
         public void RemoveButton(int index) {
             var button = Buttons[index];
             button.transform.SetParent(null);
@@ -71,12 +77,18 @@ namespace CommonAPI.Phone {
             UpdateButtons();
         }
 
+        /// <summary>
+        /// Removes a button from this scrollview. Does not destroy it.
+        /// </summary>
         public void RemoveButton(PhoneButton button) {
             button.transform.SetParent(null);
             Buttons.Remove(button);
             UpdateButtons();
         }
 
+        /// <summary>
+        /// Removes all buttons from this scrollview, but does NOT destroy them.
+        /// </summary>
         public void RemoveAllButtons() {
             foreach(var button in Buttons) {
                 button.transform.SetParent(null);
