@@ -245,6 +245,7 @@ namespace CommonAPI.Phone {
         /// Updates the animations and positioning of all buttons.
         /// </summary>
         public void UpdateButtons() {
+            if (Buttons.Count <= 0) return;
             ValidateSelectedIndex();
             var currentY = Separation;
             for (var i = 0; i < Buttons.Count; i++) {
