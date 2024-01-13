@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,10 +28,20 @@ namespace CommonAPI
         /// Default constructor. Given a plugin's name and a filename with a "{0}" token to format, will save the data inside BepInEx/config/(PluginName)/saves/(Filename).
         /// This constructor will also register the savedata into the SaveAPI.
         /// </summary>
-        public CustomSaveData(string pluginName, string filename)
+        public CustomSaveData(string pluginName, string filename, SaveLocations saveLocation = SaveLocations.Documents)
         {
-            Filename = Path.Combine(BepInEx.Paths.ConfigPath, pluginName, "saves", filename);
+            Filename = Path.Combine(GetSaveLocation(saveLocation), pluginName, "saves", filename);
             SaveAPI.RegisterCustomSaveData(this);
+        }
+
+        private string GetSaveLocation(SaveLocations saveLocation) {
+            switch (saveLocation) {
+                case SaveLocations.BepInEx:
+                    return BepInEx.Paths.BepInExConfigPath;
+                case SaveLocations.Documents:
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Bomb Rush Cyberfunk Modding");
+            }
+            return "";
         }
 
         /// <summary>
