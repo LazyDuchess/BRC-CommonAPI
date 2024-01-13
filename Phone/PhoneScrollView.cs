@@ -74,7 +74,7 @@ namespace CommonAPI.Phone {
         public void RemoveButton(int index) {
             var button = Buttons[index];
             Buttons.RemoveAt(index);
-            Destroy(button);
+            DestroyImmediate(button);
             UpdateButtons();
         }
 
@@ -83,7 +83,7 @@ namespace CommonAPI.Phone {
         /// </summary>
         public void RemoveButton(PhoneButton button) {
             Buttons.Remove(button);
-            Destroy(button);
+            DestroyImmediate(button);
             UpdateButtons();
         }
 
@@ -92,7 +92,7 @@ namespace CommonAPI.Phone {
         /// </summary>
         public void RemoveAllButtons() {
             foreach(var button in Buttons)
-                Destroy(button);
+                DestroyImmediate(button);
             Buttons.Clear();
             UpdateButtons();
         }
