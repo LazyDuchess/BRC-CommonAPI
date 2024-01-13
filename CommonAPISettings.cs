@@ -8,6 +8,10 @@ namespace CommonAPI
 {
     internal class CommonAPISettings
     {
+#if COMMONAPI_DEBUG
+        public static bool Debug = true;
+#else
         public static bool Debug = false;
+#endif
     }
 }
