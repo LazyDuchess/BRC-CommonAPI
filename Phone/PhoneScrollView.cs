@@ -69,44 +69,30 @@ namespace CommonAPI.Phone {
         }
 
         /// <summary>
-        /// Removes a button from this scrollview by its index.
+        /// Destroys a button from this scrollview by its index.
         /// </summary>
-        public void RemoveButton(int index, bool destroy = false) {
+        public void RemoveButton(int index) {
             var button = Buttons[index];
-            button.transform.SetParent(null);
             Buttons.RemoveAt(index);
-            if (destroy)
-                Destroy(button);
+            Destroy(button);
             UpdateButtons();
         }
 
         /// <summary>
-        /// Removes a button from this scrollview. Optionally destroys it.
-        /// </summary>
-        public void RemoveButton(PhoneButton button, bool destroy) {
-            button.transform.SetParent(null);
-            Buttons.Remove(button);
-            if (destroy)
-                Destroy(button);
-            UpdateButtons();
-        }
-
-        /// <summary>
-        /// Removes a button from this scrollview, without destroying it.
+        /// Destroys a button from this scrollview.
         /// </summary>
         public void RemoveButton(PhoneButton button) {
-            RemoveButton(button, false);
+            Buttons.Remove(button);
+            Destroy(button);
+            UpdateButtons();
         }
 
         /// <summary>
         /// Removes all buttons from this scrollview.
         /// </summary>
-        public void RemoveAllButtons(bool destroy = false) {
-            foreach(var button in Buttons) {
-                button.transform.SetParent(null);
-                if (destroy)
-                    Destroy(button);
-            }
+        public void RemoveAllButtons() {
+            foreach(var button in Buttons)
+                Destroy(button);
             Buttons.Clear();
             UpdateButtons();
         }
