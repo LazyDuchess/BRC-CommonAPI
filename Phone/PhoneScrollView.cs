@@ -81,14 +81,21 @@ namespace CommonAPI.Phone {
         }
 
         /// <summary>
-        /// Removes a button from this scrollview.
+        /// Removes a button from this scrollview. Optionally destroys it.
         /// </summary>
-        public void RemoveButton(PhoneButton button, bool destroy = false) {
+        public void RemoveButton(PhoneButton button, bool destroy) {
             button.transform.SetParent(null);
             Buttons.Remove(button);
             if (destroy)
                 Destroy(button);
             UpdateButtons();
+        }
+
+        /// <summary>
+        /// Removes a button from this scrollview, without destroying it.
+        /// </summary>
+        public void RemoveButton(PhoneButton button) {
+            RemoveButton(button, false);
         }
 
         /// <summary>
