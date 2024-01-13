@@ -88,7 +88,7 @@ namespace CommonAPI.Phone {
         }
 
         /// <summary>
-        /// Removes all buttons from this scrollview.
+        /// Destroys all buttons from this scrollview.
         /// </summary>
         public void RemoveAllButtons() {
             foreach(var button in Buttons)
