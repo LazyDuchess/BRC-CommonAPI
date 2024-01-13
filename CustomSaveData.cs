@@ -39,7 +39,10 @@ namespace CommonAPI
         /// </summary>
         public CustomSaveData(string pluginName, string filename, SaveLocations saveLocation)
         {
-            Filename = Path.Combine(GetSaveLocation(saveLocation), pluginName, "saves", filename);
+            if (saveLocation == SaveLocations.Absolute)
+                Filename = filename;
+            else
+                Filename = Path.Combine(GetSaveLocation(saveLocation), pluginName, "saves", filename);
             SaveAPI.RegisterCustomSaveData(this);
         }
 
