@@ -15,6 +15,10 @@ namespace CommonAPI {
         /// </summary>
         Documents,
         /// <summary>
+        /// Save data is stored in the user's Local/AppData folder, under Documents/Bomb Rush Cyberfunk Modding/saves.
+        /// </summary>
+        LocalAppData,
+        /// <summary>
         /// Save data is stored in an absolute location.
         /// </summary>
         Absolute

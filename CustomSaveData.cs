@@ -24,6 +24,8 @@ namespace CommonAPI
 
         internal bool QueuedSave = false;
 
+        private const string ApplicationDirectoryName = "Bomb Rush Cyberfunk Modding";
+
         /// <summary>
         /// Default constructor. Given a plugin's name and a filename with a "{0}" token to format, will save the data inside BepInEx/config/(PluginName)/saves/(Filename).
         /// This constructor will also register the savedata into the SaveAPI.
@@ -39,7 +41,9 @@ namespace CommonAPI
                 case SaveLocations.BepInEx:
                     return BepInEx.Paths.BepInExConfigPath;
                 case SaveLocations.Documents:
-                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Bomb Rush Cyberfunk Modding");
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments, Environment.SpecialFolderOption.DoNotVerify), ApplicationDirectoryName);
+                case SaveLocations.LocalAppData:
+                    return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData, Environment.SpecialFolderOption.DoNotVerify), ApplicationDirectoryName);
             }
             return "";
         }
