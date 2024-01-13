@@ -27,10 +27,17 @@ namespace CommonAPI
         private const string ApplicationDirectoryName = "Bomb Rush Cyberfunk Modding";
 
         /// <summary>
-        /// Default constructor. Given a plugin's name and a filename with a "{0}" token to format, will save the data inside BepInEx/config/(PluginName)/saves/(Filename).
+        /// Given a plugin's name and a filename with a "{0}" token to format, will save the data inside your documents folder by default.
         /// This constructor will also register the savedata into the SaveAPI.
         /// </summary>
-        public CustomSaveData(string pluginName, string filename, SaveLocations saveLocation = SaveLocations.Documents)
+        public CustomSaveData(string pluginName, string filename) : this(pluginName, filename, SaveLocations.Documents) {
+        }
+
+        /// <summary>
+        /// Given a plugin's name and a filename with a "{0}" token to format, will save the data inside your documents folder by default.
+        /// This constructor will also register the savedata into the SaveAPI.
+        /// </summary>
+        public CustomSaveData(string pluginName, string filename, SaveLocations saveLocation)
         {
             Filename = Path.Combine(GetSaveLocation(saveLocation), pluginName, "saves", filename);
             SaveAPI.RegisterCustomSaveData(this);
