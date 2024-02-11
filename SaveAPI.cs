@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -53,7 +53,8 @@ namespace CommonAPI
             {
                 throw new Exception("Can't register save data for " + customSaveData.GetType() +", Filename is missing a \"{0}\" token to differentiate save slots. Filename is: " + customSaveData.Filename);
             }
-            CommonAPIPlugin.Log.LogInfo($"Registering custom save data {customSaveData.GetType()}");
+            if (CommonAPISettings.Debug)
+                CommonAPIPlugin.Log.LogDebug($"Registering custom save data {customSaveData.GetType()}");
             _customSaveDatas.Add(customSaveData);
         }
 
@@ -70,7 +71,7 @@ namespace CommonAPI
             var slotId = Core.Instance.SaveManager.CurrentSaveSlot.saveSlotId;
             var saveSlotFilename = Core.Instance.SaveManager.saveSlotHandler.GetSaveSlotFileName(slotId);
             if (CommonAPISettings.Debug)
-                CommonAPIPlugin.Log.LogInfo($"Loading into save slot {slotId}, filename: {saveSlotFilename} (Initialized)");
+                CommonAPIPlugin.Log.LogDebug($"Loading into save slot {slotId}, filename: {saveSlotFilename} (Initialized)");
             var fileID = GetFilenameID(saveSlotFilename);
             LoadAllCustomData(fileID);
             OnLoadStageInitialized?.Invoke(slotId, saveSlotFilename, fileID);
@@ -84,7 +85,7 @@ namespace CommonAPI
             var slotId = Core.Instance.SaveManager.CurrentSaveSlot.saveSlotId;
             var saveSlotFilename = Core.Instance.SaveManager.saveSlotHandler.GetSaveSlotFileName(slotId);
             if (CommonAPISettings.Debug)
-                CommonAPIPlugin.Log.LogInfo($"Loading into save slot {slotId}, filename: {saveSlotFilename} (PostInitialiation)");
+                CommonAPIPlugin.Log.LogDebug($"Loading into save slot {slotId}, filename: {saveSlotFilename} (PostInitialiation)");
             OnLoadStagePostInitialization?.Invoke(slotId, saveSlotFilename, GetFilenameID(saveSlotFilename));
             AlreadyRanOnLoadStagePostInitialization = true;
         }
@@ -97,7 +98,7 @@ namespace CommonAPI
                 if (File.Exists(filename))
                 {
                     if (CommonAPISettings.Debug)
-                        CommonAPIPlugin.Log.LogInfo($"Deleting custom data for {savedata.GetType()}, file: {filename}");
+                        CommonAPIPlugin.Log.LogDebug($"Deleting custom data for {savedata.GetType()}, file: {filename}");
                     File.Delete(filename);
                 }
             }
@@ -112,7 +113,7 @@ namespace CommonAPI
                 savedata.QueuedSave = false;
                 var filename = savedata.GetFilenameForFileID(fileID);
                 if (CommonAPISettings.Debug)
-                    CommonAPIPlugin.Log.LogInfo($"Writing custom data for {savedata.GetType()}, file: {filename}");
+                    CommonAPIPlugin.Log.LogDebug($"Writing custom data for {savedata.GetType()}, file: {filename}");
                 var ms = new MemoryStream();
                 var writer = new BinaryWriter(ms);
                 savedata.Write(writer);
@@ -133,7 +134,7 @@ namespace CommonAPI
                 if (File.Exists(filename))
                 {
                     if (CommonAPISettings.Debug)
-                        CommonAPIPlugin.Log.LogInfo($"Loading custom data for {savedata.GetType()}, file: {filename}");
+                        CommonAPIPlugin.Log.LogDebug($"Loading custom data for {savedata.GetType()}, file: {filename}");
                     var fs = new FileStream(filename, FileMode.Open);
                     var reader = new BinaryReader(fs);
                     savedata.Read(reader);
@@ -143,7 +144,7 @@ namespace CommonAPI
                 else
                 {
                     if (CommonAPISettings.Debug)
-                        CommonAPIPlugin.Log.LogInfo($"Making new custom data for {savedata.GetType()}, file: {filename}");
+                        CommonAPIPlugin.Log.LogDebug($"Making new custom data for {savedata.GetType()}, file: {filename}");
                     savedata.Initialize();
                 }
             }
@@ -156,7 +157,7 @@ namespace CommonAPI
                 savedata.QueuedSave = false;
                 var filename = savedata.GetFilenameForFileID(fileID);
                 if (CommonAPISettings.Debug)
-                    CommonAPIPlugin.Log.LogInfo($"Making new custom data for {savedata.GetType()}, file: {filename}");
+                    CommonAPIPlugin.Log.LogDebug($"Making new custom data for {savedata.GetType()}, file: {filename}");
                 savedata.Initialize();
             }
         }

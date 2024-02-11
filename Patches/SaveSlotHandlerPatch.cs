@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +23,7 @@ namespace CommonAPI.Patches
             var fileID = SaveAPI.GetFilenameID(saveSlotFilename);
             SaveAPI.SaveAllCustomData(fileID);
             if (CommonAPISettings.Debug)
-                CommonAPIPlugin.Log.LogInfo($"Saving {saveSlotFilename} in slot {saveSlotId}");
+                CommonAPIPlugin.Log.LogDebug($"Saving {saveSlotFilename} in slot {saveSlotId}");
             SaveAPI.OnSaveGame?.Invoke(saveSlotId, saveSlotFilename, fileID);
         }
 
@@ -39,7 +39,7 @@ namespace CommonAPI.Patches
             var fileID = SaveAPI.GetFilenameID(saveSlotFilename);
             SaveAPI.DeleteAllCustomData(fileID);
             if (CommonAPISettings.Debug)
-                CommonAPIPlugin.Log.LogInfo($"Deleting save {saveSlotFilename} in slot {slotId}");
+                CommonAPIPlugin.Log.LogDebug($"Deleting save {saveSlotFilename} in slot {slotId}");
             SaveAPI.OnDeleteGame?.Invoke(slotId, saveSlotFilename, fileID);
         }
 
@@ -51,7 +51,7 @@ namespace CommonAPI.Patches
             var fileID = SaveAPI.GetFilenameID(saveSlotFilename);
             SaveAPI.MakeNewForAllCustomData(fileID);
             if (CommonAPISettings.Debug)
-                CommonAPIPlugin.Log.LogInfo($"Creating save {saveSlotFilename} in slot {saveSlotId}");
+                CommonAPIPlugin.Log.LogDebug($"Creating save {saveSlotFilename} in slot {saveSlotId}");
             SaveAPI.OnNewGame?.Invoke(saveSlotId, saveSlotFilename, fileID);
         }
     }
