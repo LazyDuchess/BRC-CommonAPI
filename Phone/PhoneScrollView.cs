@@ -42,12 +42,16 @@ namespace CommonAPI.Phone {
             return scrollViewComponent;
         }
 
-        public void ValidateSelectedIndex() {
+        public bool ValidateSelectedIndex() {
+            if (Buttons.Count <= 0)
+                return false;
+
             if (SelectedIndex < 0)
                 SelectedIndex = 0;
 
             if (SelectedIndex >= Buttons.Count)
                 SelectedIndex = Buttons.Count - 1;
+            return true;
         }
 
         /// <summary>
@@ -135,6 +139,7 @@ namespace CommonAPI.Phone {
         }
 
         public void OnReleaseRight() {
+            if (!ValidateSelectedIndex()) return;
             var currentButton = Buttons[SelectedIndex];
             currentButton.PlayHighlightAnimation();
             App.PlayConfirmSFX();
@@ -142,6 +147,7 @@ namespace CommonAPI.Phone {
         }
 
         public void OnPressRight() {
+            if (!ValidateSelectedIndex()) return;
             var currentButton = Buttons[SelectedIndex];
             currentButton.PlayHoldAnimation();
         }
@@ -182,6 +188,7 @@ namespace CommonAPI.Phone {
 
         public void ScrollUp() {
             App.PlaySelectSFX();
+            if (!ValidateSelectedIndex()) return;
             var previousButton = Buttons[SelectedIndex];
             SelectedIndex--;
             if (SelectedIndex < 0)
@@ -212,6 +219,7 @@ namespace CommonAPI.Phone {
 
         public void ScrollDown() {
             App.PlaySelectSFX();
+            if (!ValidateSelectedIndex()) return;
             var previousButton = Buttons[SelectedIndex];
             SelectedIndex++;
             if (SelectedIndex >= Buttons.Count)
@@ -238,8 +246,7 @@ namespace CommonAPI.Phone {
         /// Updates the animations and positioning of all buttons.
         /// </summary>
         public void UpdateButtons() {
-            if (Buttons.Count <= 0) return;
-            ValidateSelectedIndex();
+            if (!ValidateSelectedIndex()) return;
             var currentY = Separation;
             for (var i = 0; i < Buttons.Count; i++) {
                 var button = Buttons[i];
