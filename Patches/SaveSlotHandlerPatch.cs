@@ -11,6 +11,15 @@ namespace CommonAPI.Patches
     [HarmonyPatch(typeof(SaveSlotHandler))]
     internal static class SaveSlotHandlerPatch
     {
+        [HarmonyPostfix]
+        [HarmonyPatch(nameof(SaveSlotHandler.SetCurrentSaveSlotDataBySlotId))]
+        private static void SetCurrentSaveSlotDataBySlotID_Postfix(int saveSlotId)
+        {
+            SaveAPI.AlreadyRanOnLoadStageInitialized = false;
+            SaveAPI.AlreadyRanOnLoadStagePostInitialization = false;
+            SaveAPI.OnSetCurrentSaveSlot();
+        }
+
         [HarmonyPrefix]
         [HarmonyPatch(nameof(SaveSlotHandler.SaveSaveSlot))]
         private static void SaveSaveSlot_Prefix(SaveSlotHandler __instance, int saveSlotId)

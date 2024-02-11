@@ -64,6 +64,18 @@ namespace CommonAPI
             StageManager.OnStagePostInitialization += StageManager_OnStagePostInitialization;
         }
 
+        internal static void OnSetCurrentSaveSlot()
+        {
+            if (!Core.Instance.SaveManager.HasCurrentSaveSlot)
+                return;
+            var slotId = Core.Instance.SaveManager.CurrentSaveSlot.saveSlotId;
+            var saveSlotFilename = Core.Instance.SaveManager.saveSlotHandler.GetSaveSlotFileName(slotId);
+            if (CommonAPISettings.Debug)
+                CommonAPIPlugin.Log.LogInfo($"Loading into save slot {slotId}, filename: {saveSlotFilename} (Set Current Save Slot)");
+            var fileID = GetFilenameID(saveSlotFilename);
+            LoadAllCustomData(fileID);
+        }
+
         private static void StageManager_OnStageInitialized()
         {
             if (AlreadyRanOnLoadStageInitialized)
@@ -73,7 +85,6 @@ namespace CommonAPI
             if (CommonAPISettings.Debug)
                 CommonAPIPlugin.Log.LogDebug($"Loading into save slot {slotId}, filename: {saveSlotFilename} (Initialized)");
             var fileID = GetFilenameID(saveSlotFilename);
-            LoadAllCustomData(fileID);
             OnLoadStageInitialized?.Invoke(slotId, saveSlotFilename, fileID);
             AlreadyRanOnLoadStageInitialized = true;
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using Reptile.Phone;
+using UnityEngine.UIElements;
 
 namespace CommonAPI.Phone {
     /// <summary>
@@ -68,31 +69,30 @@ namespace CommonAPI.Phone {
         }
 
         /// <summary>
-        /// Removes a button from this scrollview by its index. Does not destroy it.
+        /// Destroys a button from this scrollview by its index.
         /// </summary>
         public void RemoveButton(int index) {
             var button = Buttons[index];
-            button.transform.SetParent(null);
             Buttons.RemoveAt(index);
+            Destroy(button.gameObject);
             UpdateButtons();
         }
 
         /// <summary>
-        /// Removes a button from this scrollview. Does not destroy it.
+        /// Destroys a button from this scrollview.
         /// </summary>
         public void RemoveButton(PhoneButton button) {
-            button.transform.SetParent(null);
             Buttons.Remove(button);
+            Destroy(button.gameObject);
             UpdateButtons();
         }
 
         /// <summary>
-        /// Removes all buttons from this scrollview, but does NOT destroy them.
+        /// Destroys all buttons from this scrollview.
         /// </summary>
         public void RemoveAllButtons() {
-            foreach(var button in Buttons) {
-                button.transform.SetParent(null);
-            }
+            foreach(var button in Buttons)
+                Destroy(button.gameObject);
             Buttons.Clear();
             UpdateButtons();
         }
@@ -238,6 +238,7 @@ namespace CommonAPI.Phone {
         /// Updates the animations and positioning of all buttons.
         /// </summary>
         public void UpdateButtons() {
+            if (Buttons.Count <= 0) return;
             ValidateSelectedIndex();
             var currentY = Separation;
             for (var i = 0; i < Buttons.Count; i++) {
