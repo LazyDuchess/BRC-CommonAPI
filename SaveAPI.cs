@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reptile;
+using UnityEngine.UIElements;
 
 namespace CommonAPI
 {
@@ -122,18 +123,30 @@ namespace CommonAPI
                 if (!savedata.AutoSave && !savedata.QueuedSave)
                     continue;
                 savedata.QueuedSave = false;
-                var filename = savedata.GetFilenameForFileID(fileID);
-                if (CommonAPISettings.Debug)
-                    CommonAPIPlugin.Log.LogDebug($"Writing custom data for {savedata.GetType()}, file: {filename}");
-                var ms = new MemoryStream();
-                var writer = new BinaryWriter(ms);
-                savedata.Write(writer);
-                writer.Flush();
-                var data = ms.ToArray();
-                CustomStorage.Instance.WriteFile(data, filename);
-                writer.Dispose();
-                ms.Dispose();
+                WriteData(savedata, savedata.GetFilenameForFileID(fileID));
             }
+        }
+
+        internal static void SaveBackupsOfCustomData(int fileID)
+        {
+            foreach (var savedata in _customSaveDatas)
+            {
+                WriteData(savedata, savedata.GetFilenameForFileID(fileID) + ".bak");
+            }
+        }
+
+        private static void WriteData(CustomSaveData saveData, string filename)
+        {
+            if (CommonAPISettings.Debug)
+                CommonAPIPlugin.Log.LogDebug($"Writing custom data for {saveData.GetType()}, file: {filename}");
+            var ms = new MemoryStream();
+            var writer = new BinaryWriter(ms);
+            saveData.Write(writer);
+            writer.Flush();
+            var data = ms.ToArray();
+            CustomStorage.Instance.WriteFile(data, filename);
+            writer.Dispose();
+            ms.Dispose();
         }
 
         internal static void LoadAllCustomData(int fileID)
