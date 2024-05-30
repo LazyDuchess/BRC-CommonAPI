@@ -107,12 +107,15 @@ namespace CommonAPI
             foreach (var savedata in _customSaveDatas)
             {
                 var filename = savedata.GetFilenameForFileID(fileID);
+                var backupFilename = savedata.GetBackupFilenameForFileID(fileID);
                 if (File.Exists(filename))
                 {
                     if (CommonAPISettings.Debug)
                         CommonAPIPlugin.Log.LogDebug($"Deleting custom data for {savedata.GetType()}, file: {filename}");
                     File.Delete(filename);
                 }
+                if (File.Exists(backupFilename))
+                    File.Delete(backupFilename);
             }
         }
 
@@ -131,7 +134,7 @@ namespace CommonAPI
         {
             foreach (var savedata in _customSaveDatas)
             {
-                WriteData(savedata, savedata.GetFilenameForFileID(fileID) + ".bak");
+                WriteData(savedata, savedata.GetBackupFilenameForFileID(fileID));
             }
         }
 

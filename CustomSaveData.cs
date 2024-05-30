@@ -88,5 +88,10 @@ namespace CommonAPI
         {
             return string.Format(Filename, fileID);
         }
+
+        internal string GetBackupFilenameForFileID(int fileID)
+        {
+            return GetFilenameForFileID(fileID) + ".bak";
+        }
     }
 }
