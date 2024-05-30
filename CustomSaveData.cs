@@ -22,6 +22,11 @@ namespace CommonAPI
         /// </summary>
         public bool AutoSave = true;
 
+        /// <summary>
+        /// Set this to true on the Read() method to tell the SaveAPI that you've failed to load, which will attempt to load a backup or initialize a clean save if all else fails.
+        /// </summary>
+        public bool FailedToLoad = false;
+
         internal bool QueuedSave = false;
 
         private const string ApplicationDirectoryName = "Bomb Rush Cyberfunk Modding";
@@ -59,7 +64,7 @@ namespace CommonAPI
         }
 
         /// <summary>
-        /// Called when creating a new save slot, or if the save slot being loaded doesn't have this custom data.
+        /// Called when creating a new save slot, if the save slot being loaded doesn't have this custom data or if the save failed to load.
         /// </summary>
         public virtual void Initialize()
         {

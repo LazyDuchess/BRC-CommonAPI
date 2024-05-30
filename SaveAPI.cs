@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Reptile;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace CommonAPI
@@ -152,26 +153,67 @@ namespace CommonAPI
             ms.Dispose();
         }
 
+        private static bool TryLoadCustomData(CustomSaveData saveData, string filename)
+        {
+            saveData.FailedToLoad = false;
+            try
+            {
+                var fs = new FileStream(filename, FileMode.Open);
+                var reader = new BinaryReader(fs);
+                saveData.Read(reader);
+                reader.Dispose();
+                fs.Dispose();
+                if (saveData.FailedToLoad)
+                {
+                    CommonAPIPlugin.Log.LogError($"Failed to load custom data for {saveData.GetType()} (Handled), file: {filename}");
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+                CommonAPIPlugin.Log.LogError($"Failed to load custom data for {saveData.GetType()} (Unhandled), file: {filename}{Environment.NewLine}{e}");
+                return false;
+            }
+            return true;
+        }
+
         internal static void LoadAllCustomData(int fileID)
         {
             foreach(var savedata in _customSaveDatas)
             {
                 savedata.QueuedSave = false;
                 var filename = savedata.GetFilenameForFileID(fileID);
+                var backupFilename = savedata.GetBackupFilenameForFileID(fileID);
+
+                if (!File.Exists(filename))
+                    filename = backupFilename;
+
                 if (File.Exists(filename))
                 {
                     if (CommonAPISettings.Debug)
                         CommonAPIPlugin.Log.LogDebug($"Loading custom data for {savedata.GetType()}, file: {filename}");
-                    var fs = new FileStream(filename, FileMode.Open);
-                    var reader = new BinaryReader(fs);
-                    savedata.Read(reader);
-                    reader.Dispose();
-                    fs.Dispose();
+                    var result = TryLoadCustomData(savedata, filename);
+                    if (!result)
+                    {
+                        savedata.Initialize();
+
+                        if (File.Exists(backupFilename))
+                        {
+                            CommonAPIPlugin.Log.LogInfo($"Will load backup file for {savedata.GetType()}.");
+                            result = TryLoadCustomData(savedata, backupFilename);
+                        }
+
+                        if (!result)
+                        {
+                            CommonAPIPlugin.Log.LogInfo($"Starting a clean save for {savedata.GetType()}.");
+                            savedata.Initialize();
+                        }
+                    }
                 }
                 else
                 {
                     if (CommonAPISettings.Debug)
-                        CommonAPIPlugin.Log.LogDebug($"Making new custom data for {savedata.GetType()}, file: {filename}");
+                        CommonAPIPlugin.Log.LogDebug($"Making new custom data for {savedata.GetType()}.");
                     savedata.Initialize();
                 }
             }
