@@ -99,6 +99,9 @@ namespace CommonAPI.Phone {
                 Destroy(button.gameObject);
             Buttons.Clear();
             UpdateButtons();
+            // this might be hacky?
+            ResetScroll();
+            CancelAnimation();
         }
 
         public bool HasButton(PhoneButton button) {
