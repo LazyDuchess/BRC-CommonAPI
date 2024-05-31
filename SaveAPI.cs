@@ -98,7 +98,7 @@ namespace CommonAPI
             var slotId = Core.Instance.SaveManager.CurrentSaveSlot.saveSlotId;
             var saveSlotFilename = Core.Instance.SaveManager.saveSlotHandler.GetSaveSlotFileName(slotId);
             if (CommonAPISettings.Debug)
-                CommonAPIPlugin.Log.LogDebug($"Loading into save slot {slotId}, filename: {saveSlotFilename} (PostInitialiation)");
+                CommonAPIPlugin.Log.LogDebug($"Loading into save slot {slotId}, filename: {saveSlotFilename} (PostInitialization)");
             OnLoadStagePostInitialization?.Invoke(slotId, saveSlotFilename, GetFilenameID(saveSlotFilename));
             AlreadyRanOnLoadStagePostInitialization = true;
         }
