@@ -135,8 +135,6 @@ namespace CommonAPI
         {
             foreach (var savedata in _customSaveDatas)
             {
-                if (!savedata.AutoSave && !savedata.QueuedSave && !File.Exists(savedata.GetFilenameForFileID(fileID)))
-                    continue;
                 WriteData(savedata, savedata.GetBackupFilenameForFileID(fileID));
             }
         }
