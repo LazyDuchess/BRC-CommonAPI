@@ -144,14 +144,20 @@ namespace CommonAPI.Phone {
         public void OnReleaseRight() {
             if (!ValidateSelectedIndex()) return;
             var currentButton = Buttons[SelectedIndex];
-            currentButton.PlayHighlightAnimation();
-            App.PlayConfirmSFX();
-            currentButton.Confirm();
+            if (currentButton.BeingPressed)
+            {
+                currentButton.PlayHighlightAnimation();
+                App.PlayConfirmSFX();
+                currentButton.Confirm();
+            }
+            foreach (var button in Buttons)
+                button.BeingPressed = false;
         }
 
         public void OnPressRight() {
             if (!ValidateSelectedIndex()) return;
             var currentButton = Buttons[SelectedIndex];
+            currentButton.BeingPressed = true;
             currentButton.PlayHoldAnimation();
         }
 

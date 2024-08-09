@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace CommonAPI.Phone {
     public abstract class PhoneButton : MonoBehaviour {
+        public bool BeingPressed = false;
         public abstract float Width { get; }
         public abstract float Height { get; }
         /// <summary>
