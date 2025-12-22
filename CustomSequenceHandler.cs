@@ -50,7 +50,7 @@ namespace CommonAPI
 
 		private IEnumerator StartDialogueCoroutine(CustomDialogue dialogue, float delay = DefaultDialogueDelay)
         {
-			yield return new WaitForSeconds(DefaultDialogueDelay);
+			yield return new WaitForSeconds(delay);
 			StartDialogue(dialogue);
         }
 
