@@ -20,7 +20,22 @@ namespace CommonAPI
         public override void Process()
         {
             Directory.CreateDirectory(Path.GetDirectoryName(_path));
-            File.WriteAllBytes(_path, _data);
+            var tempPath = _path + ".tmp";
+
+            using(var fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                fs.Write(_data, 0, _data.Length);
+                fs.Flush(true);
+            }
+
+            if (File.Exists(_path))
+            {
+                File.Replace(tempPath, _path, null);
+            }
+            else
+            {
+                File.Move(tempPath, _path);
+            }
         }
     }
 }
